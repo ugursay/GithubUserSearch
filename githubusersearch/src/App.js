@@ -18,27 +18,46 @@ function App() {
       setError("");
       setUser(null);
       try {
-        const response = await axios.get(
-          `https://api.github.com/users/${userName}`
-        );
-        const userData = response.data;
+        // const response = await axios.get(
+        //   `https://api.github.com/users/${userName}`
+        // );
 
+        // const reposEvents = await axios.get(
+        //   `https://api.github.com/users/${userName}/events`
+        // );
+
+        // const reposNames = await axios.get(
+        //   `https://api.github.com/users/${userName}/repos`
+        // );
+
+        const [response, reposEvents, reposNames] = await Promise.all([
+          axios.get(`https://api.github.com/users/${userName}`),
+          axios.get(`https://api.github.com/users/${userName}/events`),
+          axios.get(`https://api.github.com/users/${userName}/repos`),
+        ]);
+
+        const userData = response.data;
         const reposCount = await axios.get(userData.repos_url);
-        const reposEvents = await axios.get(
-          `https://api.github.com/users/${userName}/events`
+        const sortedRepos = reposNames.data.sort(
+          (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
         );
+
+        const lastReposNames = sortedRepos.slice(0, 3);
 
         setUser({
           ...userData,
           repos: reposCount.data.length,
-          events: reposEvents.data.slice(0, 5),
+          events: reposEvents.data.slice(0, 3),
+          reposNames: lastReposNames,
+          followers: userData.followers,
+          following: userData.following,
         });
       } catch (error) {
         console.log("hata nedeni: ", error);
         setError("😢 Kullanıcı bulunamadı");
       }
       setLoading(false);
-    }, 1000);
+    }, 750);
   };
 
   return (

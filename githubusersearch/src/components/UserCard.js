@@ -14,6 +14,8 @@ function UserCard({ user }) {
           <p className="text-base mb-2">{user.bio}</p>
 
           <div className="mb-4">
+            <p className="text-sm">Takipçi Sayısı: {user.followers}</p>
+            <p className="text-sm">Takip Sayısı: {user.following}</p>
             <p className="text-sm">Public Repo Sayısı: {user.repos}</p>
           </div>
           <div>
@@ -21,21 +23,42 @@ function UserCard({ user }) {
             {user.events.length > 0 ? (
               user.events.map((event, index) => (
                 <p index={index} className="text-sm">
-                  {event.type}
+                  {event.type} - {event.repo.name}
                 </p>
               ))
             ) : (
               <p className="text-sm">Etkinlik bulunamadı</p>
             )}
           </div>
-          <a
-            href={user.html_url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-indigo-600 font-semibold hover:underline"
-          >
-            Github Profili
-          </a>
+          <div className="mt-4">
+            <h4 className="text-lg font-semibold mb-2">Son Repolar:</h4>
+            {user.reposNames && user.reposNames.length > 0 ? (
+              user.reposNames.map((repo, index) => (
+                <a
+                  key={index}
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-semibold text-blue-600 hover:underline block"
+                >
+                  {repo.name}
+                </a>
+              ))
+            ) : (
+              <p className="text-sm">Proje bulunamadı</p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-indigo-600 font-semibold hover:underline"
+            >
+              Github Profili
+            </a>
+          </div>
         </div>
       )}
     </div>
