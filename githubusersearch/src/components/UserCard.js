@@ -33,9 +33,9 @@ function UserCard({ user }) {
           <div className="mt-4">
             <h4 className="text-lg font-semibold mb-2">Son Repolar:</h4>
             {user.reposNames && user.reposNames.length > 0 ? (
-              user.reposNames.map((repo, index) => (
+              user.reposNames.map((repo) => (
                 <a
-                  key={index}
+                  key={repo.id}
                   href={repo.html_url}
                   target="_blank"
                   rel="noreferrer"
